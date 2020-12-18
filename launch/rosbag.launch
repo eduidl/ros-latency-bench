@@ -1,0 +1,10 @@
+<launch>
+    <arg name="pub_freq" default="100"/>
+
+    <node pkg="latency_bench" type="source_pub" name="source_pub">
+        <param name="frequency" type="double" value="$(arg pub_freq)"/>
+    </node>
+
+     <node pkg="rosbag" type="record" name="rosbag_record"
+           args="record --all -o /tmp/"/>
+</launch>

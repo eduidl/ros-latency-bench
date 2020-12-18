@@ -1,0 +1,20 @@
+<launch>
+    <arg name="with_source" default="true"/>
+    <arg name="pub_freq" default="100"/>
+    <arg name="timer_freq" default="$(arg pub_freq)"/>
+    <arg name="sleep_ms" default="0."/>
+
+    <node pkg="latency_bench" type="source_pub" name="source_pub" if="$(arg with_source)">
+        <param name="frequency" type="double" value="$(arg pub_freq)"/>
+    </node>
+
+    <node pkg="latency_bench" type="timer_callback" name="sub_node">
+        <remap from="~input" to="source_pub/output"/>
+        <param name="frequency" type="double" value="$(arg timer_freq)"/>
+        <param name="sleep_ms" type="double" value="$(arg sleep_ms)"/>
+    </node>
+
+    <node pkg="latency_bench" type="latency_stat" name="latency_stat">
+        <remap from="~input" to="sub_node/output"/>
+    </node>
+</launch>
